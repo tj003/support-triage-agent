@@ -8,20 +8,24 @@ sys.path.insert(0, str(project_root))
 import streamlit as st
 
 from app.config import get_settings
-from agent.kb_search import KBSearch
-from agent.rules_classifier import RulesClassifier
+from agent.groq_client import GroqAssistant
+from agent.kb_search import KnowledgeBaseSearch
 from agent.triage_agent import TriageAgent
 
 
 @st.cache_resource(show_spinner=False)
 def get_agent() -> TriageAgent:
     settings = get_settings()
-    rules = RulesClassifier()
-    kb = KBSearch(kb_path=settings.kb_path)
+    llm_client = GroqAssistant(
+        provider=settings.llm_provider,
+        api_key=settings.groq_api_key,
+        match_threshold=settings.kb_similarity_threshold,
+    )
+    kb = KnowledgeBaseSearch(kb_path=settings.kb_path)
     return TriageAgent(
-        rules_classifier=rules,
+        llm_client=llm_client,
         kb_search=kb,
-        similarity_threshold=settings.similarity_threshold,
+        match_threshold=settings.kb_similarity_threshold,
         max_related=settings.max_related_results,
     )
 

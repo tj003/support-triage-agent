@@ -1,25 +1,41 @@
-from agent.kb_search import KBSearch
+from agent.kb_search import KnowledgeBaseSearch
 from agent.triage_agent import TriageAgent
 
 
-class StubRules:
-    def __init__(self, summary: str, category: str, severity: str) -> None:
+class StubLLMClient:
+    def __init__(
+        self, summary: str, category: str, severity: str, provider: str = "mock", threshold: float = 0.35
+    ) -> None:
         self.summary = summary
         self.category = category
         self.severity = severity
+        self.provider = provider
+        self.threshold = threshold
 
-    def classify(self, description: str):
+    def classify_ticket(self, description: str):
         return {
             "summary": self.summary,
             "category": self.category,
             "severity": self.severity,
         }
 
+    def suggest_next_action(self, description: str, category: str, severity: str, related_issues):
+        # Use fallback logic for tests with the correct threshold
+        known_issue = bool(related_issues) and related_issues[0].get("similarity", 0) >= self.threshold
+        severe = severity in {"High", "Critical"}
+        if known_issue:
+            if severe:
+                return "Attach KB article & escalate to backend"
+            return "Attach KB article & respond to user"
+        if severe:
+            return "Escalate to backend team"
+        return "Ask for more logs & assign to support"
+
 
 def build_agent(severity: str, kb_entries, threshold: float = 0.35) -> TriageAgent:
-    rules = StubRules("stub summary", "Bug", severity)
-    kb = KBSearch(entries=kb_entries)
-    return TriageAgent(rules, kb, similarity_threshold=threshold)
+    llm_client = StubLLMClient("stub summary", "Bug", severity, threshold=threshold)
+    kb = KnowledgeBaseSearch(entries=kb_entries)
+    return TriageAgent(llm_client, kb, match_threshold=threshold)
 
 
 def test_known_issue_path():

@@ -1,21 +1,30 @@
+import logging
+
 from fastapi import Depends, FastAPI, HTTPException
 
 from app.config import Settings, get_settings
 from app.schemas import HealthResponse, TriageRequest, TriageResponse
-from agent.kb_search import KBSearch
-from agent.rules_classifier import RulesClassifier
+from agent.groq_client import GroqAssistant
+from agent.kb_search import KnowledgeBaseSearch
 from agent.triage_agent import TriageAgent
+
+logger = logging.getLogger("support_triage.app")
 
 
 def get_agent(settings: Settings = Depends(get_settings)) -> TriageAgent:
     """Construct and cache the triage agent."""
     if not hasattr(get_agent, "_agent"):
-        rules = RulesClassifier()
-        kb = KBSearch(kb_path=settings.kb_path)
+        logger.info("Bootstrapping triage agent", extra={"provider": settings.llm_provider})
+        llm_client = GroqAssistant(
+            provider=settings.llm_provider,
+            api_key=settings.groq_api_key,
+            match_threshold=settings.kb_similarity_threshold,
+        )
+        kb = KnowledgeBaseSearch(kb_path=settings.kb_path)
         get_agent._agent = TriageAgent(
-            rules_classifier=rules,
+            llm_client=llm_client,
             kb_search=kb,
-            similarity_threshold=settings.similarity_threshold,
+            match_threshold=settings.kb_similarity_threshold,
             max_related=settings.max_related_results,
         )
     return get_agent._agent  # type: ignore[attr-defined]
