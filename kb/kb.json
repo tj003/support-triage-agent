@@ -1,0 +1,86 @@
+[
+  {
+    "id": "ISSUE-101",
+    "title": "Checkout error 500 on mobile",
+    "category": "Bug",
+    "symptoms": ["500 error", "mobile", "checkout", "card"],
+    "recommended_action": "Escalate to payments team"
+  },
+  {
+    "id": "ISSUE-102",
+    "title": "Billing double charge on annual plan",
+    "category": "Billing",
+    "symptoms": ["double charge", "annual", "invoice"],
+    "recommended_action": "Create refund request and notify finance"
+  },
+  {
+    "id": "ISSUE-103",
+    "title": "Login reset email not sent",
+    "category": "Login",
+    "symptoms": ["reset email", "not received", "password"],
+    "recommended_action": "Check email queue and resend via admin"
+  },
+  {
+    "id": "ISSUE-104",
+    "title": "2FA device mismatch",
+    "category": "Login",
+    "symptoms": ["2fa", "device mismatch", "authentication"],
+    "recommended_action": "Verify device list and reset challenge token"
+  },
+  {
+    "id": "ISSUE-105",
+    "title": "Dashboard slow for enterprise tenants",
+    "category": "Performance",
+    "symptoms": ["slow", "dashboard", "enterprise", "latency"],
+    "recommended_action": "Collect traces and notify performance squad"
+  },
+  {
+    "id": "ISSUE-106",
+    "title": "Safari UI layout breaks",
+    "category": "Bug",
+    "symptoms": ["safari", "ui bug", "layout", "css"],
+    "recommended_action": "Attach screenshot and assign to web team"
+  },
+  {
+    "id": "ISSUE-107",
+    "title": "API rate limit errors for bulk sync",
+    "category": "Performance",
+    "symptoms": ["rate limit", "429", "api", "bulk sync"],
+    "recommended_action": "Advise batching and monitor API gateway"
+  },
+  {
+    "id": "ISSUE-108",
+    "title": "Webhook retries failing for payments",
+    "category": "Bug",
+    "symptoms": ["webhook", "retry", "payments", "500"],
+    "recommended_action": "Replay events and escalate to payments"
+  },
+  {
+    "id": "ISSUE-109",
+    "title": "Chrome extension cannot login",
+    "category": "Login",
+    "symptoms": ["extension", "chrome", "login", "oauth"],
+    "recommended_action": "Collect console logs and update extension"
+  },
+  {
+    "id": "ISSUE-110",
+    "title": "Reports export stuck in processing",
+    "category": "Performance",
+    "symptoms": ["reports", "export", "processing", "queue"],
+    "recommended_action": "Check worker queue and restart job"
+  },
+  {
+    "id": "ISSUE-111",
+    "title": "Invoice PDF download missing totals",
+    "category": "Billing",
+    "symptoms": ["invoice", "pdf", "missing total", "billing"],
+    "recommended_action": "Regenerate invoice and notify billing squad"
+  },
+  {
+    "id": "ISSUE-112",
+    "title": "Checkout declined due to address validation",
+    "category": "Billing",
+    "symptoms": ["checkout", "address", "validation", "declined"],
+    "recommended_action": "Recommend address update and sync with fraud"
+  }
+]
